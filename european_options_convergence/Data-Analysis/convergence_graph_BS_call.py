@@ -2,6 +2,10 @@ import black_scholes as bs_cf
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
+
+BASE = Path(__file__).resolve().parent
+EXCELS = BASE / "../Excels"
 
 spot = 120.0
 future = 115.0
@@ -21,7 +25,7 @@ bs_cf_call = bs_cf.call(
 
 
 
-df = pd.read_csv("Black-Scholes-Call.csv")
+df = pd.read_csv(EXCELS / "Black-Scholes-Call.csv")
 
 N = np.array(df["N"])
 binomial_tree = np.array(df["Binomial Tree"])
