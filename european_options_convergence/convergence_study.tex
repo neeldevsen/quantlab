@@ -1,0 +1,157 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{needspace}
+\usepackage{placeins}
+\usetikzlibrary{arrows.meta}
+\numberwithin{equation}{section}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{caption}
+\usepackage{listings}
+\captionsetup[listing]{
+	skip=4pt
+}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{\nouppercase{\rightmark}}
+\fancyhead[R]{\thepage}
+
+\renewcommand{\subsectionmark}[1]{%
+	\markright{\thesubsection\quad #1}
+}
+
+\title{
+	\textbf{European Option Convergence Study}\\[0.0em]
+}
+
+\author{Neel Dev Sen}
+\date{August 09, 2026}
+\author{Neel Dev Sen}
+\usepackage[newfloat]{minted}
+\usemintedstyle{manni}
+
+\begin{document}
+    \maketitle
+	\newpage
+	\tableofcontents
+	\newpage
+	
+	\newpage
+	\setcounter{section}{0}
+	
+	
+\section*{Introduction}
+This convergence study is based on the 3 European Option pricers I have made in my other project called \textbf{Pricing Engines} (which you can find on my \href{https://github.com/neeldevsen/pricing-engines/tree/main}{\textbf{GitHub}}). The numerical methods that will be compared is the Binomial Tree, Trinomial Tree and the Finite Differences (using the Crank-Nicolson scheme)
+
+\section{Theoretical  and Numerical Framework}
+This section will mainly just be stating the Time and Space complexities, the complete derivations of these are in this \href{https://github.com/neeldevsen/pricing-engines/blob/main/PricingEngines.pdf}{\textbf{document}}. 
+\subsection{Time Complexities}
+The time complexity of a Binomial Tree with $N$ steps is:
+\begin{equation}
+	\boxed{\mathcal{O}(N^2)}
+\end{equation}
+The time complexity of a Trinomial Tree with $N$ steps is also:
+\begin{equation}
+	\boxed{\mathcal{O}(N^2)}
+\end{equation}
+Finally the time complexity of the Finite Differences with a mesh of $M$ space nodes and $N$ time nodes is:
+\begin{equation}
+	\boxed{\mathcal{O}(M\times N)}
+\end{equation}
+Since I used the Thomas algorithm it makes it faster instead of $\mathcal{O}(M^3\times N)$
+In this experiment to keep this all similar so it is easier to compare, I define $M=N$ to make a square mesh such that the time complexity of Finite Differences is also:
+\begin{equation}
+	\boxed{\mathcal{O}(N^2)}
+\end{equation}
+All of these time complexities will be useful when I show the runtime-convergence graphs of these numerical methods
+\subsection{Space Complexities}
+The space complexity of a Binomial Tree with $N$ steps is:
+\begin{equation}
+	\boxed{\mathcal{O}(N)}
+\end{equation}
+The space complexity of a Trinomial Tree with $N$ steps is also:
+\begin{equation}
+	\boxed{\mathcal{O}(N^2)}
+\end{equation}
+Finally the time complexity of the Finite Differences with a mesh of $M$ space nodes and $N$ time nodes is:
+\begin{equation}
+	\boxed{\mathcal{O}(M)}
+\end{equation}
+Over here I don't store the entire matrix, instead I store the 3 diagonals as 3 separate vectors. Since again I am using $M=N$ this space complexity is equal to:
+\begin{equation}
+	\boxed{\mathcal{O}(N)}
+\end{equation}
+This will be useful for the section on memory. 
+\subsection{Error Metrics}
+The \textbf{absolute error} is the main error metric that will be used to show convergence and it goes as shown.
+\begin{equation}
+	\boxed{\operatorname{Absolute  \hspace{4pt} Error} =  |V_N - V_{CF} |}
+\end{equation}
+where $V_N$ is the value of the option given by the numerical method, and $V_{CF}$ is the value of the option given by the closed form solution. 
+\newline 
+For the Arbitrage Error, I will just look at how far the options are from meeting the \textbf{Put-Call Parity} (the no-arbitrage condition)
+The Put Call Parity is as shown
+\begin{equation}
+	C_t - P_t = S - Ke^{-r(T-t)}
+\end{equation}
+The arbitrage error will be defined as:
+\begin{equation}
+	\boxed{\operatorname{Arbitrage \hspace{4pt} Error} = |C_t - P_t - S + Ke^{-r(T-t)}|}]
+\end{equation}
+\newpage
+\subsection{Data}
+The table below will be the data that is used in the convergence study. 
+\begin{table}[H]
+	\centering
+	\begin{tabular}{lccc}
+		\hline
+		\textbf{Parameter} & \textbf{Black--Scholes} & \textbf{Black--76} & \textbf{Merton} \\
+		\hline
+		Spot Price $S_0$       & 120.0 & --    & 120.0 \\
+		Futures Price $F_0$    & --    & 115.0 & --    \\
+		Strike $K$             & 100.0 & 100.0 & 100.0 \\
+		Risk-Free Rate $r$     & 0.04  & 0.04  & 0.04  \\
+		Dividend Yield $q$     & --    & --    & 0.02  \\
+		Volatility $\sigma$    & 0.25  & 0.25  & 0.25  \\
+		Maturity $T$           & 2.0   & 2.0   & 2.0   \\
+		Domain Multiplier      & 4.0   & 4.0   & 4.0   \\
+		\hline
+	\end{tabular}
+	\caption{Parameters used for the numerical convergence study.}
+	\label{tab:parameters}
+\end{table}
+
+\section{Results: Black-Scholes}
+\subsection{Black-Scholes Call}
+\subsection{Black-Scholes Put}
+\subsection{Arbitrage Error}
+\subsection{Runtime}
+
+\section{Results: Black-76 }
+\subsection{Black-76 Call}
+\subsection{Black-76 Put}
+\subsection{Arbitrage Error}
+\subsection{Runtime}
+
+\section{Results: Merton}
+\subsection{Merton Call}
+\subsection{Merton Put}
+\subsection{Arbitrage Error}
+\subsection{Runtime}
+
+\section{Conclusion}
+
+
+\end{document}
