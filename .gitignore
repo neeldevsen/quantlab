@@ -1,0 +1,10 @@
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.pygtex
+*.bib
+*.tex
+*.pygstyle
+*.json
